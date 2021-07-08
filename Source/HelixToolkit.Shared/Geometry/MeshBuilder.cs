@@ -3943,6 +3943,22 @@ namespace HelixToolkit.Wpf
             }
 
             int index0 = this.positions.Count;
+ #if SHARPDX
+            this.positions.AddRange(positionsToAppend);
+
+            if (this.normals != null && normalsToAppend != null)
+            {
+                this.normals.AddRange(normalsToAppend);
+            }
+
+            if (this.textureCoordinates != null && textureCoordinatesToAppend != null)
+            {
+                this.textureCoordinates.AddRange(textureCoordinatesToAppend);
+            }
+
+            this.triangleIndices.AddRange(triangleIndicesToAppend);
+            System.Threading.Tasks.Parallel.For(index0, index0 + triangleIndicesToAppend.Count - 1, i => { this.triangleIndices[i] += index0; });
+#else
             foreach (var p in positionsToAppend)
             {
                 this.positions.Add(p);
@@ -3968,6 +3984,7 @@ namespace HelixToolkit.Wpf
             {
                 this.triangleIndices.Add(index0 + i);
             }
+#endif
         }
         /// <summary>
         /// Chamfers the specified corner (experimental code).
